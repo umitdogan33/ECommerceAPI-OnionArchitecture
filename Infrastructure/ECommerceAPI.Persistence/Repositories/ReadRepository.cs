@@ -1,5 +1,6 @@
 ﻿using ECommerceAPI.Application.Repositories;
 using ECommerceAPI.Domain.Entities.Common;
+using ECommerceAPI.Domain.RequestParamaters;
 using ECommerceAPI.Persistence.Contexts;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -22,20 +23,27 @@ namespace ECommerceAPI.Persistence.Repositories
 
         public DbSet<T> Table => _context.Set<T>();
 
-        public IQueryable<T> GetAll(bool tracking = true) 
+        public IQueryable<T> GetAll(Pagination? pagination,bool tracking = true) 
         {
             var query = Table.AsQueryable();
 
             if (!tracking)
                 query = query.AsNoTracking();
 
+            if (pagination != null)
+                query = query.Take(pagination.Size * pagination.Page).Skip(pagination.Size);
+
+
             return query;
         }
 
-        public IQueryable<T> GetWhere(Expression<Func<T, bool>> method, bool tracking = true) {
+        public IQueryable<T> GetWhere(Expression<Func<T, bool>> method, Pagination? pagination, bool tracking = true) {
             var query = Table.Where(method);
             if (!tracking)
                 query = query.AsNoTracking();
+
+            if (pagination != null)
+                query = query.Take(pagination.Size * pagination.Page).Skip(pagination.Size);
             return query;
 
         }

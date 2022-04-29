@@ -10,12 +10,6 @@ namespace ECommerceAPI.Application.CQRS.Commands.Request
 {
     public class CreateProductCommandRequest : IRequest<CreateProductCommandResponse>
     {
-        public CreateProductCommandRequest(string name, int stock, int price)
-        {
-            Name = name;
-            Stock = stock;
-            Price = price;
-        }
 
         public string Name { get; set; }
         public int Stock { get; set; }
