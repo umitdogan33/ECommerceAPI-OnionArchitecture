@@ -63,5 +63,23 @@ namespace ECommerceAPI.Persistence.Repositories
 
             return await query.SingleOrDefaultAsync(p => p.Id == Guid.Parse(id));
         }
+
+        public IQueryable<T> GetAll(bool tracking = true)
+        {
+            var query = Table.AsQueryable();
+
+            if (!tracking)
+                query = query.AsNoTracking();
+
+            return query;
+        }
+
+        public IQueryable<T> GetWhere(Expression<Func<T, bool>> method, bool tracking = true)
+        {
+            var query = Table.Where(method);
+            if (!tracking)
+                query = query.AsNoTracking();
+            return query;
+        }
     }
 }
